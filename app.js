@@ -73,7 +73,7 @@ keys.addEventListener("click", (e) => {
 
         displayDown.innerHTML = "";
         displayDownValue = 0;
-      } else {
+      } else if (pointControl) {
         displayUpValue = displayDownValue;
         displayDownValue = 0;
         displayUp.innerHTML =
@@ -84,7 +84,7 @@ keys.addEventListener("click", (e) => {
 
     // result(=) button
     if (e.target.innerHTML == "=") {
-      if (displayUp.innerHTML) {
+      if (displayUp.innerHTML && displayDown.innerHTML) {
         displayDownValue = process(
           displayUpValue,
           displayDownValue,
