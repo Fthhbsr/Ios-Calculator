@@ -9,24 +9,37 @@ let operatorPrev;
 displayDown.innerHTML = displayDownValue;
 
 keys.addEventListener("click", (e) => {
+  //boşluk tıklandığında işlem yapmaması için
   if (e.target.parentElement.classList.contains("box")) {
     // console.log(e.target);
-
+    //write to the number
     if (e.target.parentElement.classList.contains("number")) {
       displayDownValue = +(displayDown.innerHTML + e.target.innerHTML);
       console.log(displayDownValue);
     }
-
+    //to make the current number positive or negative
     if (e.target.innerHTML == "±") {
       console.log("+-");
       displayDownValue *= -1;
       console.log(displayDownValue);
     }
-    displayDown.innerHTML = displayDownValue;
 
+    displayDown.innerHTML = displayDownValue;
+    // point button
+    if (e.target.innerHTML == ".") {
+      console.log(e.target.innerHTML);
+      console.log(displayDownValue);
+      if (displayDownValue % 1 == 0) {
+        displayDown.innerHTML += ".";
+        console.log(displayDown.innerHTML);
+      }
+    }
+    //operators buttons
     if (e.target.parentElement.classList.contains("operator")) {
       if (e.target.innerHTML == "x") {
         operator = "*";
+      } else if (e.target.innerHTML == "÷") {
+        operator = "/";
       } else {
         operator = e.target.innerHTML;
       }
@@ -49,7 +62,7 @@ keys.addEventListener("click", (e) => {
       operatorPrev = operator;
       console.log(operator);
     }
-
+    // result(=) button
     if (e.target.innerHTML == "=") {
       if (displayUp.innerHTML) {
         displayDownValue = process(displayUpValue, displayDownValue, operator);
@@ -57,7 +70,7 @@ keys.addEventListener("click", (e) => {
         displayUp.innerHTML = "";
       }
     }
-
+    // reset button
     if (e.target.innerHTML == "AC") {
       console.log("AC");
       displayUp.innerHTML = "";
@@ -68,6 +81,7 @@ keys.addEventListener("click", (e) => {
   }
 });
 
+// arithmetic process function
 const process = function (val1, val2, ops) {
   let result;
   switch (ops) {
@@ -84,8 +98,8 @@ const process = function (val1, val2, ops) {
       result = val1 - val2;
       break;
   }
-  if (!result % 1 || result < 0) {
-    result.toFixed(2);
+  if (result % 1 != 0) {
+    result = result.toFixed(2);
   }
   return result;
 };
