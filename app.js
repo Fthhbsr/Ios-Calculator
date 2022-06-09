@@ -6,6 +6,7 @@ let displayUpValue = 0;
 let displayDownValue = 0;
 let isControl = true;
 let operator = [];
+let pointControl = true;
 
 // let operatorPrev;
 displayDown.innerHTML = displayDownValue;
@@ -14,7 +15,6 @@ displayDown.innerHTML = displayDownValue;
 keys.addEventListener("click", (e) => {
   //so that it doesn't take action when the space is clicked
   if (e.target.parentElement.classList.contains("box")) {
-    // console.log(e.target);
     //write to the number
     if (e.target.parentElement.classList.contains("number")) {
       if (!isControl) {
@@ -23,28 +23,32 @@ keys.addEventListener("click", (e) => {
         displayDown.innerHTML = "";
       }
       displayDownValue = +(displayDown.innerHTML + e.target.innerHTML);
-      console.log(displayDownValue);
       displayDown.innerHTML = displayDownValue;
       isControl = true;
+      pointControl = true;
     }
+
     //to make the current number positive or negative
     if (e.target.innerHTML == "±") {
-      console.log("+-");
       displayDownValue *= -1;
-      console.log(displayDownValue);
       displayDown.innerHTML = displayDownValue;
     }
 
     // displayDown.innerHTML = displayDownValue;
     // point button
     if (e.target.innerHTML == ".") {
-      console.log(e.target.innerHTML);
-      console.log(displayDownValue);
-      if (displayDownValue % 1 == 0) {
-        displayDown.innerHTML += ".";
-        console.log(displayDown.innerHTML);
+      if (!isControl) {
+        // "=" işlemi yaptıktan sonra resetlemek için
+        displayDownValue = 0;
+        displayDown.innerHTML = "";
       }
+      if (displayDownValue % 1 == 0 && pointControl) {
+        displayDown.innerHTML += ".";
+        pointControl = false;
+      }
+      isControl = true;
     }
+
     //operators buttons
     if (e.target.parentElement.classList.contains("operator")) {
       if (e.target.innerHTML == "x") {
@@ -70,19 +74,14 @@ keys.addEventListener("click", (e) => {
         displayDown.innerHTML = "";
         displayDownValue = 0;
       } else {
-        // if (displayDownValue != 0 && typeof displayDownValue == "number") {
-        // }
         displayUpValue = displayDownValue;
         displayDownValue = 0;
         displayUp.innerHTML =
           displayDown.innerHTML + operator[operator.length - 1];
         displayDown.innerHTML = "";
       }
-
-      //   operatorPrev = operator;
-      console.log(operator);
-      //   console.log(operatorPrev);
     }
+
     // result(=) button
     if (e.target.innerHTML == "=") {
       if (displayUp.innerHTML) {
@@ -96,6 +95,7 @@ keys.addEventListener("click", (e) => {
         isControl = false;
       }
     }
+
     // reset button
     if (e.target.innerHTML == "AC") {
       console.log("AC");
@@ -110,7 +110,7 @@ keys.addEventListener("click", (e) => {
 // arithmetic process function
 const process = function (val1, val2, ops) {
   let result;
-  console.log(ops);
+
   switch (ops) {
     case "*":
       result = val1 * val2;
@@ -124,10 +124,13 @@ const process = function (val1, val2, ops) {
     case "-":
       result = val1 - val2;
       break;
+    case "%":
+      result = (val1 / 100) * val2;
+      break;
   }
+
   if (result % 1 != 0) {
-    console.log(result, typeof result);
-    result = result.toFixed(2);
+    result = +result.toFixed(2);
   }
 
   return result;

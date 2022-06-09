@@ -31,10 +31,12 @@
 .display-up {
   color: rgb(124, 123, 118);
   height: 80px;
+  overflow: hidden;
 }
 .display-down {
   color: white;
   height: 80px;
+  overflow: hidden;
 }
 
 .keys {
